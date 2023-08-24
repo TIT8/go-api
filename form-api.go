@@ -110,11 +110,11 @@ func post_handler(w http.ResponseWriter, r *http.Request) {
 		text := fmt.Sprintf("Name:\t%s\nE-mail:\t%s\nMessage:\t%s", name, email, message)
 		SendMessage(text)
 
-		url := fmt.Sprintf("%s/success", r.Header.Get("Referer"))
+		url := fmt.Sprintf("%ssuccess", r.Header.Get("Referer"))
 
 		http.Redirect(w, r, url, 302)
 	} else {
-		url := fmt.Sprintf("%s/ops", r.Header.Get("Referer"))
+		url := fmt.Sprintf("%sops", r.Header.Get("Referer"))
 
 		http.Redirect(w, r, url, 302)
 	}
