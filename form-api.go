@@ -14,10 +14,6 @@ type Post struct {
 	Success bool `json:"success"`
 }
 
-var email string
-var message string
-var name string
-
 var Token string = "6169685035:AAEgNi4pC5gARzCiMlvkDTFIEOOClD6wHB0"
 var ChatId string = "-1001888191995"
 
@@ -53,14 +49,15 @@ func SendMessage(text string) (bool, error) {
 	defer response.Body.Close()
 
 	// Body
-	body, err = io.ReadAll(response.Body)
-	if err != nil {
-		return false, err
-	}
-
+	/*
+		body, err = io.ReadAll(response.Body)
+		if err != nil {
+			return false, err
+		}
+	*/
 	// Log
-	fmt.Printf("Message '%s' was sent\n", text)
-	fmt.Printf("Response JSON: %s\n", string(body))
+	//fmt.Printf("Message '%s' was sent\n", text)
+	//fmt.Printf("Response JSON: %s\n", string(body))
 
 	// Return
 	return true, nil
@@ -71,11 +68,11 @@ func post_handler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	r.ParseForm()
-	email = r.Form["email"][0]
-	message = r.Form["message"][0]
-	name = r.Form["name"][0]
+	email := r.Form["email"][0]
+	message := r.Form["message"][0]
+	name := r.Form["name"][0]
 	solution := r.Form["frc-captcha-solution"][0]
-	fmt.Println(solution)
+	//fmt.Println(solution)
 
 	data := url.Values{}
 	data.Add("solution", solution)
@@ -91,6 +88,11 @@ func post_handler(w http.ResponseWriter, r *http.Request) {
 	}
 	defer resp.Body.Close()
 	body, err := io.ReadAll(resp.Body)
+	if err != nil {
+		log.Printf("Formatting body failed: %s", err)
+		return
+	}
+
 	// Log the request body
 	//bodyString := string(body)
 	//log.Print(bodyString)
@@ -102,21 +104,21 @@ func post_handler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	log.Println(post.Success)
+	//log.Println(post.Success)
 
-	fmt.Println(r.Header.Get("Referer"))
+	//fmt.Println(r.Header.Get("Referer"))
 
-	if post.Success == true {
+	if post.Success {
 		text := fmt.Sprintf("Name:\t%s\nE-mail:\t%s\nMessage:\t%s", name, email, message)
 		SendMessage(text)
 
 		url := fmt.Sprintf("%ssuccess", r.Header.Get("Referer"))
-
-		http.Redirect(w, r, url, 302)
+		//fmt.Println(url)
+		http.Redirect(w, r, url, http.StatusSeeOther)
 	} else {
 		url := fmt.Sprintf("%sops", r.Header.Get("Referer"))
-
-		http.Redirect(w, r, url, 302)
+		//fmt.Println(url)
+		http.Redirect(w, r, url, http.StatusSeeOther)
 	}
 }
 
