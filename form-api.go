@@ -68,10 +68,12 @@ func post_handler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	r.ParseForm()
+
 	email := r.Form["email"][0]
 	message := r.Form["message"][0]
 	name := r.Form["name"][0]
 	solution := r.Form["frc-captcha-solution"][0]
+	log.Println(r.Form["pageurl"][0])
 	//fmt.Println(solution)
 
 	data := url.Values{}
@@ -112,11 +114,11 @@ func post_handler(w http.ResponseWriter, r *http.Request) {
 		text := fmt.Sprintf("Name:\t%s\nE-mail:\t%s\nMessage:\t%s", name, email, message)
 		SendMessage(text)
 
-		url := fmt.Sprintf("%ssuccess", r.Header.Get("Referer"))
+		url := r.Form["pageurl"][0] + "success"
 		//fmt.Println(url)
 		http.Redirect(w, r, url, http.StatusSeeOther)
 	} else {
-		url := fmt.Sprintf("%sops", r.Header.Get("Referer"))
+		url := r.Form["pageurl"][0] + "ops"
 		//fmt.Println(url)
 		http.Redirect(w, r, url, http.StatusSeeOther)
 	}
@@ -125,5 +127,5 @@ func post_handler(w http.ResponseWriter, r *http.Request) {
 func main() {
 	http.HandleFunc("/", handler)
 	http.HandleFunc("/post", post_handler)
-	log.Fatal(http.ListenAndServe("localhost:8080", nil))
+	log.Fatal(http.ListenAndServe(":8080", nil))
 }
