@@ -8,6 +8,7 @@ import (
 	"log"
 	"net/http"
 	"net/url"
+	"regexp"
 )
 
 const Token string = "6169685035:AAEgNi4pC5gARzCiMlvkDTFIEOOClD6wHB0"
@@ -75,9 +76,13 @@ func handler_post(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Access-Control-Allow-Origin", "*")
 	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
 
-	var err error
-	log.Println(r.Header.Get("Content-Type")[:19])
-	if r.Header.Get("Content-Type")[:19] == "multipart/form-data" {
+	content_type, err := regexp.MatchString("multipart/form-data", r.Header.Get("Content-Type"))
+	if err != nil {
+		log.Fatal(err)
+	}
+	log.Printf("Content-Type is multipart/form-data?  %v\n", content_type)
+
+	if content_type {
 		err = r.ParseMultipartForm(100)
 	} else {
 		err = r.ParseForm()
@@ -120,7 +125,7 @@ func handler_post(w http.ResponseWriter, r *http.Request) {
 		log.Printf("Reading body failed: %s", err)
 		return
 	}
-	log.Println(post.Success)
+	log.Printf("Captcha validation: %v", post.Success)
 
 	var ok string
 	if post.Success {
