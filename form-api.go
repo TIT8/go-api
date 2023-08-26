@@ -10,15 +10,22 @@ import (
 	"net/url"
 )
 
+const Token string = "6169685035:AAEgNi4pC5gARzCiMlvkDTFIEOOClD6wHB0"
+const ChatId string = "-1001888191995"
+
+type Response struct {
+	Response string `json:"response"`
+}
+
 type Post struct {
 	Success bool `json:"success"`
 }
 
-var Token string = "6169685035:AAEgNi4pC5gARzCiMlvkDTFIEOOClD6wHB0"
-var ChatId string = "-1001888191995"
-
-func handler(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintf(w, "Hi there, I love %s!", r.URL.Path[1:])
+type Request struct {
+	Email   string `json:"email"`
+	Name    string `json:"name"`
+	Message string `json:"message"`
+	Captcha string `json:"frc-captcha-solution"`
 }
 
 func getUrl() string {
@@ -26,16 +33,18 @@ func getUrl() string {
 }
 
 func SendMessage(text string) (bool, error) {
-	// Global variables
 	var err error
 	var response *http.Response
 
-	// Send the message
 	url := fmt.Sprintf("%s/sendMessage", getUrl())
-	body, _ := json.Marshal(map[string]string{
+	body, err := json.Marshal(map[string]string{
 		"chat_id": ChatId,
 		"text":    text,
 	})
+	if err != nil {
+		return false, err
+	}
+
 	response, err = http.Post(
 		url,
 		"application/json",
@@ -45,39 +54,48 @@ func SendMessage(text string) (bool, error) {
 		return false, err
 	}
 
-	// Close the request at the end
 	defer response.Body.Close()
 
-	// Body
-	/*
-		body, err = io.ReadAll(response.Body)
-		if err != nil {
-			return false, err
-		}
-	*/
-	// Log
-	//fmt.Printf("Message '%s' was sent\n", text)
-	//fmt.Printf("Response JSON: %s\n", string(body))
-
-	// Return
 	return true, nil
 }
 
-func post_handler(w http.ResponseWriter, r *http.Request) {
+func handler_get(w http.ResponseWriter, r *http.Request) {
+	if r.Method != "GET" {
+		return
+	}
+
+	fmt.Fprintf(w, "Ciao %s\n", r.Host)
+}
+
+func handler_post(w http.ResponseWriter, r *http.Request) {
 	if r.Method != "POST" {
 		return
 	}
-	r.ParseForm()
 
-	email := r.Form["email"][0]
-	message := r.Form["message"][0]
-	name := r.Form["name"][0]
-	solution := r.Form["frc-captcha-solution"][0]
-	log.Println(r.Form["pageurl"][0])
-	//fmt.Println(solution)
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
+
+	var err error
+	log.Println(r.Header.Get("Content-Type")[:19])
+	if r.Header.Get("Content-Type")[:19] == "multipart/form-data" {
+		err = r.ParseMultipartForm(100)
+	} else {
+		err = r.ParseForm()
+	}
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	req := Request{
+		Email:   r.FormValue("email"),
+		Name:    r.FormValue("name"),
+		Message: r.FormValue("message"),
+		Captcha: r.FormValue("frc-captcha-solution"),
+	}
+	//log.Println(req)
 
 	data := url.Values{}
-	data.Add("solution", solution)
+	data.Add("solution", req.Captcha)
 	data.Add("secret", "A1UGN12VU21PUJCEUJNDHHTP0CD835IGMDUO3IS0JVBDUBUUVQJ584DPD1")
 	data.Add("sitekey", "FCMTGCV10AMHV9QE")
 
@@ -89,43 +107,53 @@ func post_handler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	defer resp.Body.Close()
+
 	body, err := io.ReadAll(resp.Body)
 	if err != nil {
 		log.Printf("Formatting body failed: %s", err)
 		return
 	}
 
-	// Log the request body
-	//bodyString := string(body)
-	//log.Print(bodyString)
-	// Unmarshal result
 	post := Post{}
 	err = json.Unmarshal(body, &post)
 	if err != nil {
 		log.Printf("Reading body failed: %s", err)
 		return
 	}
+	log.Println(post.Success)
 
-	//log.Println(post.Success)
-
-	//fmt.Println(r.Header.Get("Referer"))
-
+	var ok string
 	if post.Success {
-		text := fmt.Sprintf("Name:\t%s\nE-mail:\t%s\nMessage:\t%s", name, email, message)
-		SendMessage(text)
 
-		url := r.Form["pageurl"][0] + "success"
-		//fmt.Println(url)
-		http.Redirect(w, r, url, http.StatusSeeOther)
+		text := fmt.Sprintf("Name:\t%s\nE-mail:\t%s\nMessage:\t%s", req.Name, req.Email, req.Message)
+		result, err := SendMessage(text)
+		if !result {
+			log.Printf("Error sending telegram messag, %s\n", err)
+			w.WriteHeader(http.StatusNotAcceptable)
+		} else {
+			ok = "ok"
+		}
+
 	} else {
-		url := r.Form["pageurl"][0] + "ops"
-		//fmt.Println(url)
-		http.Redirect(w, r, url, http.StatusSeeOther)
+
+		ok = "not ok"
+		w.WriteHeader(http.StatusNotAcceptable)
+
 	}
+
+	response := Response{ok}
+	res, err := json.Marshal(response)
+	if err != nil {
+		log.Fatal(err)
+	}
+	log.Println(string(res))
+
+	w.Header().Set("Content-Type", "application/json")
+	w.Write(res)
 }
 
 func main() {
-	http.HandleFunc("/", handler)
-	http.HandleFunc("/post", post_handler)
+	http.HandleFunc("/", handler_get)
+	http.HandleFunc("/post", handler_post)
 	log.Fatal(http.ListenAndServe(":8080", nil))
 }
