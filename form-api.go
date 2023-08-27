@@ -130,7 +130,7 @@ func handler_post(w http.ResponseWriter, r *http.Request) {
 	var ok string
 	if post.Success {
 
-		text := fmt.Sprintf("Name:\t%s\nE-mail:\t%s\nMessage:\t%s", req.Name, req.Email, req.Message)
+		text := fmt.Sprintf("New message!\n\nName:\t%s\n\nE-mail:\t%s\n\nMessage:\t%s\n", req.Name, req.Email, req.Message)
 		result, err := SendMessage(text)
 		if !result {
 			log.Printf("Error sending telegram messag, %s\n", err)
