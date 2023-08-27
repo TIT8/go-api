@@ -62,6 +62,7 @@ func SendMessage(text string) (bool, error) {
 
 func handler_get(w http.ResponseWriter, r *http.Request) {
 	if r.Method != "GET" {
+		w.WriteHeader(http.StatusMethodNotAllowed)
 		return
 	}
 
@@ -70,6 +71,7 @@ func handler_get(w http.ResponseWriter, r *http.Request) {
 
 func handler_post(w http.ResponseWriter, r *http.Request) {
 	if r.Method != "POST" {
+		w.WriteHeader(http.StatusMethodNotAllowed)
 		return
 	}
 
