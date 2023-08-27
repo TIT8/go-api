@@ -3,6 +3,10 @@ on:
   push:
     branches:
       - master
+    paths-ignore:
+      - '**/README.md'
+      - '.github/**'
+      
 jobs:
   deploy:
     name: Deploy app
