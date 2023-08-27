@@ -30,10 +30,13 @@ type Request struct {
 }
 
 func getUrl() string {
+
 	return fmt.Sprintf("https://api.telegram.org/bot%s", Token)
+
 }
 
 func SendMessage(text string) (bool, error) {
+
 	var err error
 	var response *http.Response
 
@@ -58,18 +61,22 @@ func SendMessage(text string) (bool, error) {
 	defer response.Body.Close()
 
 	return true, nil
+
 }
 
 func handler_get(w http.ResponseWriter, r *http.Request) {
+
 	if r.Method != "GET" {
 		w.WriteHeader(http.StatusMethodNotAllowed)
 		return
 	}
 
 	fmt.Fprintf(w, "Ciao %s\n", r.Host)
+
 }
 
 func handler_post(w http.ResponseWriter, r *http.Request) {
+
 	if r.Method != "POST" {
 		w.WriteHeader(http.StatusMethodNotAllowed)
 		return
@@ -157,10 +164,14 @@ func handler_post(w http.ResponseWriter, r *http.Request) {
 
 	w.Header().Set("Content-Type", "application/json")
 	w.Write(res)
+
 }
 
 func main() {
+
 	http.HandleFunc("/", handler_get)
 	http.HandleFunc("/post", handler_post)
+
 	log.Fatal(http.ListenAndServe(":8080", nil))
+
 }
