@@ -17,3 +17,8 @@ jobs:
       - run: flyctl deploy --remote-only
         env:
           FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
+          CAPTCHA_SECRET: ${{ secrets.CAPTCHA_SECRET }}
+          CAPTCHA_SITEKEY: ${{ secrets.CAPTCHA_SITEKEY }}
+          CHAT_ID: ${{ secrets.CHAT_ID }}
+          TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
+
