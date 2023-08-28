@@ -69,7 +69,7 @@ func handler_get(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	r.Body = http.MaxBytesReader(w, r.Body, 10)
+	r.Body = http.MaxBytesReader(w, r.Body, 100)
 
 	fmt.Fprintf(w, "Ciao %s\n", r.Host)
 
