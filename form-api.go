@@ -95,6 +95,7 @@ func handler_post(w http.ResponseWriter, r *http.Request) {
 		err = r.ParseForm()
 	}
 	if err != nil {
+		w.WriteHeader(http.StatusUnsupportedMediaType)
 		log.Fatal(err)
 	}
 
