@@ -90,12 +90,12 @@ func handler_post(w http.ResponseWriter, r *http.Request) {
 	log.Printf("Content-Type is multipart/form-data?  %v\n", content_type)
 
 	if content_type {
-		err = r.ParseMultipartForm(100)
+		err = r.ParseMultipartForm(1000)
 	} else {
 		err = r.ParseForm()
 	}
 	if err != nil {
-		w.WriteHeader(http.StatusUnsupportedMediaType)
+		http.Error(w, err.Error(), http.StatusUnsupportedMediaType)
 		log.Fatal(err)
 	}
 
