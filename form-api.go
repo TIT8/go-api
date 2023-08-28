@@ -8,11 +8,9 @@ import (
 	"log"
 	"net/http"
 	"net/url"
+	"os"
 	"regexp"
 )
-
-const Token string = "6169685035:AAEgNi4pC5gARzCiMlvkDTFIEOOClD6wHB0"
-const ChatId string = "-1001888191995"
 
 type Response struct {
 	Response string `json:"response"`
@@ -31,7 +29,7 @@ type Request struct {
 
 func getUrl() string {
 
-	return fmt.Sprintf("https://api.telegram.org/bot%s", Token)
+	return fmt.Sprintf("https://api.telegram.org/bot%s", os.Getenv("TELEGRAM_TOKEN"))
 
 }
 
@@ -42,7 +40,7 @@ func SendMessage(text string) (bool, error) {
 
 	url := fmt.Sprintf("%s/sendMessage", getUrl())
 	body, err := json.Marshal(map[string]string{
-		"chat_id": ChatId,
+		"chat_id": os.Getenv("CHAT_ID"),
 		"text":    text,
 	})
 	if err != nil {
@@ -110,8 +108,8 @@ func handler_post(w http.ResponseWriter, r *http.Request) {
 
 	data := url.Values{}
 	data.Add("solution", req.Captcha)
-	data.Add("secret", "A1UGN12VU21PUJCEUJNDHHTP0CD835IGMDUO3IS0JVBDUBUUVQJ584DPD1")
-	data.Add("sitekey", "FCMTGCV10AMHV9QE")
+	data.Add("secret", os.Getenv("CAPTCHA_SECRET"))
+	data.Add("sitekey", os.Getenv("CAPTCHA_SITEKEY"))
 
 	posturl := "https://api.friendlycaptcha.com/api/v1/siteverify"
 
@@ -142,15 +140,21 @@ func handler_post(w http.ResponseWriter, r *http.Request) {
 		text := fmt.Sprintf("New message!\n\nName:\t%s\n\nE-mail:\t%s\n\nMessage:\t%s\n", req.Name, req.Email, req.Message)
 		result, err := SendMessage(text)
 		if !result {
+
 			log.Printf("Error sending telegram messag, %s\n", err)
 			w.WriteHeader(http.StatusNotAcceptable)
+			ok = "Valid CAPTCHA but error on Telegram request"
+
 		} else {
-			ok = "ok"
+
+			w.WriteHeader(http.StatusOK)
+			ok = "Valid CAPTCHA and Telegram sent"
+
 		}
 
 	} else {
 
-		ok = "not ok"
+		ok = "CAPTCHA validation failed"
 		w.WriteHeader(http.StatusNotAcceptable)
 
 	}
