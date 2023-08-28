@@ -133,7 +133,7 @@ func handler_post(w http.ResponseWriter, r *http.Request) {
 		log.Printf("Reading body failed: %s", err)
 		return
 	}
-	log.Printf("Captcha validation: %v", post.Success)
+	//log.Printf("Captcha validation: %v", post.Success)
 
 	var ok string
 	if post.Success {
