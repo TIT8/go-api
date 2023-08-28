@@ -85,7 +85,7 @@ func handler_post(w http.ResponseWriter, r *http.Request) {
 
 	content_type, err := regexp.MatchString("multipart/form-data", r.Header.Get("Content-Type"))
 	if err != nil {
-		log.Fatal(err)
+		log.Println(err)
 	}
 	log.Printf("Content-Type is multipart/form-data?  %v\n", content_type)
 
@@ -162,7 +162,7 @@ func handler_post(w http.ResponseWriter, r *http.Request) {
 	response := Response{ok}
 	res, err := json.Marshal(response)
 	if err != nil {
-		log.Fatal(err)
+		log.Println(err)
 	}
 	log.Println(string(res))
 
