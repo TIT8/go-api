@@ -69,6 +69,8 @@ func handler_get(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	r.Body = http.MaxBytesReader(w, r.Body, 100)
+
 	fmt.Fprintf(w, "Ciao %s\n", r.Host)
 
 }
@@ -80,6 +82,8 @@ func handler_post(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	r.Body = http.MaxBytesReader(w, r.Body, 50*1024)
+
 	w.Header().Set("Access-Control-Allow-Origin", "*")
 	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
 
@@ -90,12 +94,12 @@ func handler_post(w http.ResponseWriter, r *http.Request) {
 	log.Printf("Content-Type is multipart/form-data?  %v\n", content_type)
 
 	if content_type {
-		err = r.ParseMultipartForm(100)
+		err = r.ParseMultipartForm(1000)
 	} else {
 		err = r.ParseForm()
 	}
 	if err != nil {
-		w.WriteHeader(http.StatusUnsupportedMediaType)
+		http.Error(w, err.Error(), http.StatusUnsupportedMediaType)
 		log.Fatal(err)
 	}
 
