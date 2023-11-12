@@ -14,9 +14,9 @@ Go api for Triennale-elettronica-polimi "e-mail us" [section](https://triennale-
 6. &nbsp; Write the result on the HTTP header (200 or 406) and on the responsse to the javascript client.
 7. &nbsp; The Javascript client will [handle the response](https://github.com/valerionew/triennale-elettronica-polimi/blob/master/layouts/shortcodes/contact.html#L73) and inform the user about the operation (inserting text on HTML).
 
-It's hosted on **[Flyio](https://fly.io/)** [^1], automatically deployed on master changes via [Github Actions](https://github.com/TIT8/go-api/actions/workflows/fly.yml).    
+It's hosted on **[Flyio](https://fly.io/)**, automatically deployed on master changes via [Github Actions](https://github.com/TIT8/go-api/actions/workflows/fly.yml) [^1].    
 
-[^1]: All the secret variables are stored as enviroment variables on Fliyio.
+[^1]: All the secret variables are stored as enviroment variables also on Fliyio.
 
 ❗ **Try it sending a GET request**: `curl https://formapi.fly.dev` 🪃
 
