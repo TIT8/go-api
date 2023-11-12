@@ -18,7 +18,7 @@ It's hosted on **[Flyio](https://fly.io/)** [^1], automatically deployed on mast
 
 [^1]: All the secret variables are stored as enviroment variables on Fliyio.
 
-Try it sending a GET request to _https://formapi.fly.dev_.
+**Try it sending a GET request**: `curl https://formapi.fly.dev` 🪃
 
 ## Thanks
 
