@@ -71,7 +71,7 @@ func handler_get(w http.ResponseWriter, r *http.Request) {
 
 	r.Body = http.MaxBytesReader(w, r.Body, 100)
 
-	fmt.Fprintf(w, "Ciao da %s\nIP address: %s \t %s", r.Host, r.RemoteAddr, r.Header.Get("X-Forwarded-For"))
+	fmt.Fprintf(w, "Ciao da %s\nList of IP addresses received (yours and various proxies):\n%s, %s", r.Host, r.RemoteAddr, r.Header.Get("X-Forwarded-For"))
 
 }
 
