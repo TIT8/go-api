@@ -12,7 +12,7 @@ Go api for Triennale-elettronica-polimi "e-mail us" [section](https://triennale-
 4. &nbsp; It sends message to a Telegram BOT which will write to a <ins>private</ins> channel ([here](https://stackoverflow.com/questions/33858927/how-to-obtain-the-chat-id-of-a-private-telegram-channel) how).
 5. &nbsp; Check if the communication with the Telegram API was successful.
 6. &nbsp; Write the result on the HTTP header (200 or 406) and on the responsse to the javascript client.
-7. &nbsp; The Javascript client will [handle the response](https://github.com/valerionew/triennale-elettronica-polimi/blob/master/layouts/shortcodes/contact.html#L73) and inform the user about the operation (inserting text on HTML).
+7. &nbsp; The Javascript client will handle the response and inform the user about the operation (inserting text on HTML).
 
 It's hosted on **[Flyio](https://fly.io/)**, automatically deployed on master changes via [Github Actions](https://github.com/TIT8/go-api/actions/workflows/fly.yml) [^1].    
 
