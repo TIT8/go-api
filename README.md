@@ -1,8 +1,15 @@
-# go-api
+# Description
 
 ![Github Actions](https://github.com/TIT8/go-api/actions/workflows/fly.yml/badge.svg)
 
-Go api for Triennale-elettronica-polimi "e-mail us" [section](https://triennale-elettronica-polimi.netlify.app/contact/#e-mail-us) with [friendly captcha](https://friendlycaptcha.com/) protection.
+HTTP API that handles, under the hood, the [e-mail us section](https://triennale-elettronica-polimi.netlify.app/contact/#e-mail-us) of _Triennale-elettronica-polimi_ website.   
+
+☁️ It's hosted on **[Flyio](https://fly.io/)**. [^1]  
+🛡️ Protected by bot via [friendly captcha](https://friendlycaptcha.com/).  
+👻 Hidden secrets via enviroment variable.  
+⚡ Fast thanks to [Go](https://go.dev/).  
+
+[^1]: Automatically deployed on `master` changes via [Github Actions](https://github.com/TIT8/go-api/actions/workflows/fly.yml).  
 
 ## How it works
 
@@ -14,14 +21,14 @@ Go api for Triennale-elettronica-polimi "e-mail us" [section](https://triennale-
 6. &nbsp; Write the result on the HTTP header (200 or 406) and on the responsse to the javascript client.
 7. &nbsp; The Javascript client will handle the response and inform the user about the operation (inserting text on HTML).
 
-It's hosted on **[Flyio](https://fly.io/)**, automatically deployed on master changes via [Github Actions](https://github.com/TIT8/go-api/actions/workflows/fly.yml) [^1].    
+## Testing
 
-[^1]: All the secret variables are stored as enviroment variables also on Fliyio.
-
-❗ **Try it sending a GET request**: 
+❗ **Try it sending a GET request** [^2]
 ```
 curl https://formapi.fly.dev
 ```
+
+[^2]: You cannot send POST request as you won't send the friendly captcha verification code. 
 
 ## Thanks
 
