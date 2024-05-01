@@ -30,6 +30,8 @@ HTTP API that handles, under the hood, the [_e-mail us_](https://triennale-elett
 curl https://formapi.fly.dev
 ```
 
+Or if you are on a web browser, just [click me](https://formapi.fly.dev).
+
 [^3]: You cannot send POST request as you won't send the friendly captcha verification code. 
 
 ## Why redirect the HTML form to this API if JavaScript can handle HTTP requests with ease?
