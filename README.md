@@ -8,8 +8,10 @@ HTTP API that handles, under the hood, the [_e-mail us_](https://triennale-elett
 🛡️ Protected by bot via [friendly captcha](https://friendlycaptcha.com/).  
 👻 Hidden secrets via enviroment variable.  
 ⚡ Fast thanks to [Go](https://go.dev/).  
+📬 Communicate with the Telegram API. [^2]
 
 [^1]: Automatically deployed on `master` changes via [Github Actions](https://github.com/TIT8/go-api/actions/workflows/fly.yml).  
+[^2]: The [Telegram API](https://core.telegram.org/)
 
 ## How it works
 
@@ -23,12 +25,20 @@ HTTP API that handles, under the hood, the [_e-mail us_](https://triennale-elett
 
 ## Testing
 
-❗ **Try it sending a GET request** [^2]
+❗ **Try it sending a GET request** [^3]
 ```
 curl https://formapi.fly.dev
 ```
 
-[^2]: You cannot send POST request as you won't send the friendly captcha verification code. 
+[^3]: You cannot send POST request as you won't send the friendly captcha verification code. 
+
+## Why redirect the HTML form to this API if JavaScript can handle HTTP requests with ease?
+
+Because the [Polimi website](https://github.com/valerionew/triennale-elettronica-polimi) is open source, it's important for future generations of students to have access to it and the ability to make changes. However, in JavaScript, how can we hide secret variables while maintaining an open-source project? These secret variables are crucial for accessing friendly captcha protection and the Telegram chat where messages are delivered. If these secrets are exploited, it could lead to misuse of the Telegram chat and render it unusable.
+
+You can refer to discussions [here](https://stackoverflow.com/questions/28890783/how-do-i-hide-a-variable-value-in-javascript) and [here](https://stackoverflow.com/questions/8520626/how-it-is-possible-to-not-expose-you-secret-key-with-a-javascript-oauth-library), which focus on the server-side approach. 
+
+But it's important to remember that Telegram is just an API endpoint, and it's entirely possible to send messages to chats from the browser as well (see [here](https://stackoverflow.com/questions/73084236/send-message-to-telegram-through-html-form-using-javascript) for an example). The same applies to the verification API of friendly captcha, which you can find [here](https://docs.friendlycaptcha.com/#/verification_api).
 
 ## Thanks
 
