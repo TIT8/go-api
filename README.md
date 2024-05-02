@@ -2,7 +2,7 @@
 
 ![Github Actions](https://github.com/TIT8/go-api/actions/workflows/fly.yml/badge.svg)
 
-HTTP API that handles, under the hood, the [_e-mail us_](https://triennale-elettronica-polimi.netlify.app/contact/#e-mail-us) section of _Triennale-elettronica-polimi_ website.   
+HTTP API that handles, under the hood, the [_e-mail us_](https://triennale-elettronica-polimi.netlify.app/contact/#e-mail-us) section and the [Google Form](https://docs.google.com/forms/d/e/1FAIpQLSfXDekNQoiSoKHrhhTwierImnB-j7miit-LFZIWr0wCGGVYlg/viewform) of the _Triennale-elettronica-polimi_ website.   
 
 ☁️ It's hosted on **[Flyio](https://fly.io/)**. [^1]  
 🛡️ Protected by bot via [friendly captcha](https://friendlycaptcha.com/).  
