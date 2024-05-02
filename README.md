@@ -33,6 +33,8 @@ HTTP API that handles, under the hood, the [_e-mail us_](https://triennale-elett
 
 3. Through this API, we can filter incoming data; if the data is too large or of the wrong type, it is rejected before reaching Telegram. This serves as a security shield before sending emails or messages to maintainers.
 
+4. We don't depends on external, usually not free, Cloud Automation APP, like [IFTTT](https://ifttt.com/explore).
+
 ## Testing
 
 ❗ **Try it sending a GET request** [^3]
