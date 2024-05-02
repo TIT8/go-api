@@ -1,7 +1,7 @@
 function onSubmit(e) {
 
   var form = FormApp.getActiveForm();
-  var formResponses = form.getResponses()
+  var formResponses = form.getResponses();
   var data = new Object();
 
   for (var i = 0; i < formResponses.length; i++) {
