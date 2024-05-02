@@ -27,6 +27,13 @@ type Request struct {
 	Captcha string `json:"frc-captcha-solution"`
 }
 
+type GForm struct {
+	Name    string `json:"name"`
+	Email   string `json:"email"`
+	Message string `json:"message"`
+	File    string `json:"file"`
+}
+
 func getUrl() string {
 
 	return fmt.Sprintf("https://api.telegram.org/bot%s", os.Getenv("TELEGRAM_TOKEN"))
@@ -73,6 +80,54 @@ func handler_get(w http.ResponseWriter, r *http.Request) {
 
 	fmt.Fprintf(w, "Ciao da %s\nList of IP addresses received (including yours, if visible):\n%s\n", r.Host, r.Header.Get("X-Forwarded-For"))
 
+}
+
+func handler_sheet(w http.ResponseWriter, r *http.Request) {
+
+	if r.Method != "POST" {
+		w.WriteHeader(http.StatusMethodNotAllowed)
+		return
+	}
+
+	r.Body = http.MaxBytesReader(w, r.Body, 5*1024)
+
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
+
+	content_type, err := regexp.MatchString("application/json", r.Header.Get("Content-Type"))
+	if err != nil {
+		log.Println(err)
+		w.WriteHeader(http.StatusBadRequest)
+		return
+	}
+	if !content_type {
+		w.WriteHeader(http.StatusUnsupportedMediaType)
+		return
+	}
+
+	body, err := io.ReadAll(r.Body)
+	if err != nil {
+		log.Println(err)
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+
+	var data GForm
+	err = json.Unmarshal(body, &data)
+	if err != nil {
+		log.Println(err)
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+
+	text := fmt.Sprintf("New message from Google Form!\n\nName:\t%s\n\nE-mail:\t%s\n\nMessage:\t%s\n\nFile link:\t%s", data.Name, data.Email, data.Message, data.File)
+	result, err := SendMessage(text)
+	if !result {
+		log.Printf("Error sending telegram messag, %s\n", err)
+		w.WriteHeader(http.StatusNotAcceptable)
+	} else {
+		w.WriteHeader(http.StatusOK)
+	}
 }
 
 func handler_post(w http.ResponseWriter, r *http.Request) {
@@ -128,6 +183,7 @@ func handler_post(w http.ResponseWriter, r *http.Request) {
 	body, err := io.ReadAll(resp.Body)
 	if err != nil {
 		log.Printf("Formatting body failed: %s", err)
+		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
 
@@ -135,6 +191,7 @@ func handler_post(w http.ResponseWriter, r *http.Request) {
 	err = json.Unmarshal(body, &post)
 	if err != nil {
 		log.Printf("Reading body failed: %s", err)
+		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
 	//log.Printf("Captcha validation: %v", post.Success)
@@ -142,26 +199,21 @@ func handler_post(w http.ResponseWriter, r *http.Request) {
 	var ok string
 	if post.Success {
 
-		text := fmt.Sprintf("New message!\n\nName:\t%s\n\nE-mail:\t%s\n\nMessage:\t%s\n", req.Name, req.Email, req.Message)
+		text := fmt.Sprintf("New message from HTML form!\n\nName:\t%s\n\nE-mail:\t%s\n\nMessage:\t%s\n", req.Name, req.Email, req.Message)
+
 		result, err := SendMessage(text)
 		if !result {
-
 			log.Printf("Error sending telegram messag, %s\n", err)
 			w.WriteHeader(http.StatusNotAcceptable)
 			ok = "Valid CAPTCHA but error on Telegram request"
-
 		} else {
-
 			w.WriteHeader(http.StatusOK)
 			ok = "Valid CAPTCHA and Telegram sent"
-
 		}
 
 	} else {
-
 		ok = "CAPTCHA validation failed"
 		w.WriteHeader(http.StatusNotAcceptable)
-
 	}
 
 	response := Response{ok}
@@ -169,7 +221,7 @@ func handler_post(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		log.Println(err)
 	}
-	log.Println(string(res))
+	//log.Println(string(res))
 
 	w.Header().Set("Content-Type", "application/json")
 	w.Write(res)
@@ -180,6 +232,7 @@ func main() {
 
 	http.HandleFunc("/", handler_get)
 	http.HandleFunc("/post", handler_post)
+	http.HandleFunc("/sheet", handler_sheet)
 
 	log.Fatal(http.ListenAndServe(":8080", nil))
 
