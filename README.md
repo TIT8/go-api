@@ -25,11 +25,13 @@ HTTP API that handles, under the hood, the [_e-mail us_](https://triennale-elett
 
 ## Why redirect the HTML form to this API if JavaScript can handle HTTP requests with ease?
 
-Because the [Polimi website](https://github.com/valerionew/triennale-elettronica-polimi) is open source, it's important for future generations of students to have access to it and the ability to make changes. However, in JavaScript, how can we hide secret variables while maintaining an open-source project? These secret variables are crucial for accessing friendly captcha protection and the Telegram chat where messages are delivered. If these secrets are exploited, it could lead to misuse of the Telegram chat and render it unusable.
+1. Because the [Polimi website](https://github.com/valerionew/triennale-elettronica-polimi) is open source, it's important for future generations of students to have access to it and the ability to make changes. However, in JavaScript, how can we hide secret variables while maintaining an open-source project? These secret variables are crucial for accessing friendly captcha protection and the Telegram chat where messages are delivered. If these secrets are exploited, it could lead to misuse of the Telegram chat and render it unusable.
 
-You can refer to discussions [here](https://stackoverflow.com/questions/28890783/how-do-i-hide-a-variable-value-in-javascript) and [here](https://stackoverflow.com/questions/8520626/how-it-is-possible-to-not-expose-you-secret-key-with-a-javascript-oauth-library), which focus on the server-side approach. 
+   You can refer to discussions [here](https://stackoverflow.com/questions/28890783/how-do-i-hide-a-variable-value-in-javascript) and [here](https://stackoverflow.com/questions/8520626/how-it-is-possible-to-not-expose-you-secret-key-with-a-javascript-oauth-library), which focus on the server-side approach. 
 
-But it's important to remember that Telegram is just an API endpoint, and it's entirely possible to send messages to chats from the browser as well (see [here](https://stackoverflow.com/questions/73084236/send-message-to-telegram-through-html-form-using-javascript) for an example). The same applies to the verification API of friendly captcha, which you can find [here](https://docs.friendlycaptcha.com/#/verification_api).
+   But it's important to remember that Telegram is just an API endpoint, and it's entirely possible to send messages to chats from the browser as well (see [here](https://stackoverflow.com/questions/73084236/send-message-to-telegram-through-html-form-using-javascript) for an example). The same applies to the verification API of friendly captcha, which you can find [here](https://docs.friendlycaptcha.com/#/verification_api).
+
+2. This API can be extended with additional features, such as the ability to directly receive files and create pull requests to the GitHub repository, something that cannot be achieved in the browser.
 
 ## Testing
 
