@@ -33,7 +33,7 @@ HTTP API that handles, under the hood, the [_e-mail us_](https://triennale-elett
 
 3. Through this API, we can filter incoming data; if the data is too large or of the wrong type, it is rejected before reaching Telegram. This serves as a security shield before sending emails or messages to maintainers.
 
-(4. We don't depends on external, usually not free, Cloud Automation APP, like [IFTTT](https://ifttt.com/explore), but we depend on Fly.io. I personally prefer the last one, I've found external apps not so fast to send messages on Google Form/Sheet update.)
+&nbsp; _(4. We don't depends on external, usually not free, Cloud Automation APP, like [IFTTT](https://ifttt.com/explore), but we depend on Fly.io. I personally prefer the last one, I've found external apps not so fast to send messages on Google Form/Sheet update.)_
 
 ## Testing
 
