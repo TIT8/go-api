@@ -1,4 +1,4 @@
-// AppScript inside Google Form
+//AppScript inside Google Form, run from installable triggers
 
 function onSubmit(e) {
 
