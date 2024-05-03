@@ -1,3 +1,5 @@
+// AppScript inside Google Form
+
 function onSubmit(e) {
 
   var form = FormApp.getActiveForm();
