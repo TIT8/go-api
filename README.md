@@ -35,6 +35,10 @@ HTTP API that handles, under the hood, the [_e-mail us_](https://triennale-elett
 
 4. <sub>We don't depend on external, usually not free, Cloud Automation APP, like [IFTTT](https://ifttt.com/explore), but we depend on Fly.io. I personally prefer the last one, I've found external apps not so fast to send messages on Google Form/Sheet update. And with 4 Fly.io machines (2 in France, 2 in Sweden), I'm pretty sure to be covered in case of fault of one of them.</sub>
 
+## Future development
+
+Embed the CAPTCHA validation directly into the API.
+
 ## Testing
 
 ❗ **Try it sending a GET request** [^3]
