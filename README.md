@@ -37,7 +37,7 @@ HTTP API that handles, under the hood, the [_e-mail us_](https://triennale-elett
 
 ## Future development
 
-Embed the CAPTCHA validation directly into the API.
+:pushpin: Embed the CAPTCHA validation directly into the API.
 
 ## Testing
 
